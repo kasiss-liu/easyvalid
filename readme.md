@@ -92,3 +92,15 @@ example:
     其他类型 会判断是否等于nil
 ```
 
+```text
+in
+    `evalid:"in:eq[neq](值1,值2)|{msg:"{错误信息}"}`
+example:
+    `evalid:"in:eq(1,2)|msg:"异常的值"`
+支持的数据类型
+    int、int64、int32、uint、uint64、uint32 
+    float64、float32 
+    string 
+    byte、rune 
+```
+
