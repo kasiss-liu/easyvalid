@@ -17,7 +17,7 @@ type parserEntry struct {
 	filename   string
 	pkg        *packages.Package
 	syntax     *ast.File
-	structures []structInfo
+	structures []StructInfo
 }
 
 //Parser 项目解析器
@@ -144,7 +144,7 @@ func (p *Parser) GetStructures() []*Structure {
 	return structures
 }
 
-//GetStructures 根据需要的结构体名称 获取已经解析的结构体
+//GetStructure 根据需要的结构体名称 获取已经解析的结构体
 func (p *Parser) GetStructure(stnames []string) []*Structure {
 	structures, sts := make(sortableStructures, 0), make(sortableStructures, 0)
 	for _, entry := range p.entries {
@@ -185,7 +185,7 @@ func (p *Parser) GetPkg() *packages.Package {
 func (p *Parser) packageStructures(
 	pkg *types.Package,
 	fileName string,
-	declaredStructures []structInfo,
+	declaredStructures []StructInfo,
 	structures []*Structure) []*Structure {
 	scope := pkg.Scope()
 
@@ -228,11 +228,11 @@ func (p *Parser) packageStructures(
 
 //NodeVisitor 节点遍历器
 type NodeVisitor struct {
-	declaredStructures []structInfo
+	declaredStructures []StructInfo
 }
 
-//简单的结构体信息
-type structInfo struct {
+//StructInfo 简单的结构体信息
+type StructInfo struct {
 	Name  string //结构体名称
 	Alias string //注释中的结构体 方法别名 easyvalid:valid:(alias)
 }
@@ -240,12 +240,12 @@ type structInfo struct {
 //NewNodeVisitor 构建并返回新的遍历器
 func NewNodeVisitor() *NodeVisitor {
 	return &NodeVisitor{
-		declaredStructures: make([]structInfo, 0),
+		declaredStructures: make([]StructInfo, 0),
 	}
 }
 
 //DeclaredStructures 返回已经声明的结构体
-func (nv *NodeVisitor) DeclaredStructures() []structInfo {
+func (nv *NodeVisitor) DeclaredStructures() []StructInfo {
 	return nv.declaredStructures
 }
 
@@ -255,7 +255,7 @@ func (nv *NodeVisitor) Visit(node ast.Node) ast.Visitor {
 	case *ast.TypeSpec:
 		if alias, ok := checkGenerate(n.Doc.Text(), generateFlag); ok {
 			if _, ok := n.Type.(*ast.StructType); ok {
-				nv.declaredStructures = append(nv.declaredStructures, structInfo{n.Name.Name, alias})
+				nv.declaredStructures = append(nv.declaredStructures, StructInfo{n.Name.Name, alias})
 			}
 		}
 	case *ast.GenDecl:
