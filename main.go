@@ -22,6 +22,7 @@ var (
 	exported    = flag.Bool("export", false, "attr valid funcs if exported")
 	force       = flag.Bool("f", false, "force rm file suffix with _easyvalid.go")
 	verson      = flag.Bool("v", false, "show version")
+	debug       = flag.Bool("debug", false, "debug mode")
 )
 
 func osExit(err error, code int) {
@@ -99,7 +100,8 @@ func main() {
 	//验证参数
 	//验证输入文件
 	if *ppath == "" {
-		osExitWithHelp(errors.New("path is empty"), 1)
+		// osExitWithHelp(errors.New("path is empty"), 1)
+		*ppath = "./"
 	}
 	fdir, err := filepath.Abs(filepath.Dir(*ppath))
 	if err != nil {
@@ -150,6 +152,9 @@ func main() {
 		}
 		for _, name := range stnames {
 			if _, ok := stmap[name]; !ok {
+				if *debug {
+					fmt.Printf("%#v %#v\n", stmap, structs)
+				}
 				osExit(errors.New("struct "+name+" not found"), 1)
 			}
 		}

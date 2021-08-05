@@ -149,7 +149,7 @@ func (p *Parser) GetStructure(stnames []string) []*Structure {
 	structures, sts := make(sortableStructures, 0), make(sortableStructures, 0)
 	for _, entry := range p.entries {
 		declaredStructures := entry.structures
-		sts = p.packageStructures(entry.pkg.Types, entry.filename, declaredStructures, structures)
+		sts = p.packageStructures(entry.pkg.Types, entry.filename, declaredStructures, sts)
 	}
 	for _, name := range stnames {
 		for _, st := range sts {
