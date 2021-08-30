@@ -32,7 +32,7 @@ type Parser struct {
 //NewParser 构建并返回一个新的解析器
 func NewParser() *Parser {
 	var conf packages.Config
-	conf.Mode = packages.LoadSyntax
+	conf.Mode = packages.NeedImports | packages.NeedTypes | packages.NeedSyntax | packages.NeedTypesInfo | packages.NeedName | packages.NeedFiles
 	conf.Env = []string{"GO111MODULE=on"}
 
 	return &Parser{
@@ -165,7 +165,6 @@ func (p *Parser) GetStructure(stnames []string) []*Structure {
 
 //GetImports 获取类中的package引用
 func (p *Parser) GetImports() []*packages.Package {
-
 	pkgs := make([]*packages.Package, 0)
 	for _, entry := range p.entries {
 		imps := entry.pkg.Imports

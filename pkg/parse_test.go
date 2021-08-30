@@ -21,7 +21,7 @@ func TestAAA(t *testing.T) {
 
 func TestParse(t *testing.T) {
 	parser := NewParser()
-	err := parser.Parse("../_examples/Animal/Animal.go")
+	err := parser.Parse("../_examples/Animal/Dog.go")
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -29,6 +29,7 @@ func TestParse(t *testing.T) {
 	parser.Load()
 
 	pkgs := parser.GetImports()
+	t.Log(pkgs)
 	for k, v := range pkgs {
 		fmt.Println(k, v)
 	}
